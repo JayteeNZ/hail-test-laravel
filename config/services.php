@@ -30,4 +30,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'hail' => [
+        'client_id' => env('HAIL_CLIENT_ID'),
+        'client_secret' => env('HAIL_CLIENT_SECRET'),
+        // We can hardcode the url here, it's not important to be in an .env file.
+        'redirect' => '/login/callback',
+    ]
+
 ];
