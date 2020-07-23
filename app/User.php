@@ -16,24 +16,48 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 
+        'last_name', 
+        'email', 
+        'avatar_url'
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
+     * Append to the user JSON response.
+     * 
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
+    protected $appends = [
+        'full_name'
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
+     * Get the user's oauth providers.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function providers()
+    {
+        return $this->hasMany(OAuthProvider::class);
+    }
+
+    /**
+     * Get the full name of the user.
+     * 
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Retrieve the hail provider for the user.
+     * 
+     * @return App\OAuthProvider
+     */
+    public function getHailProvider()
+    {
+        return $this->providers()->where('name', 'hail')->first();
+    }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Hail\Guzzle;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('test', function () {
+    $userId = Auth::user()->getHailProvider()->provider_user_id;
+    dd(Guzzle::get('users/' . $userId . '/organisations'));
 });
+
+Route::get('/', 'HomeController')->name('home');
+
+Route::get('login', 'Auth\SocialiteController@redirectToProvider')->name('login');
+Route::get('login/callback', 'Auth\SocialiteController@handleCallback');
